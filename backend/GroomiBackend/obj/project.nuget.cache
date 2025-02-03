@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "cfYHhDQ6Nos=",
+  "success": true,
+  "projectFilePath": "D:\\לירוי\\Websites\\workTask\\groomi-app\\backend\\GroomiBackend\\GroomiBackend.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Liroy\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.1\\microsoft.aspnetcore.openapi.9.0.1.nupkg.sha512",
+    "C:\\Users\\Liroy\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}
