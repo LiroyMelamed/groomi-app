@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GroomiBackend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+13294ad9139e15b42de510aecc4a00534a140f3d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e2c1a38f1b4e418d4cda9dc141e948066e9748fd")]
 [assembly: System.Reflection.AssemblyProductAttribute("GroomiBackend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GroomiBackend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
