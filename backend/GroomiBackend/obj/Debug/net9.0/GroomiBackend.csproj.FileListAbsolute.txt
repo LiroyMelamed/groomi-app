@@ -158,3 +158,4 @@ D:\לירוי\Websites\workTask\groomi-app\backend\GroomiBackend\obj\Debug\net9.
 D:\לירוי\Websites\workTask\groomi-app\backend\GroomiBackend\obj\Debug\net9.0\GroomiBackend.pdb
 D:\לירוי\Websites\workTask\groomi-app\backend\GroomiBackend\obj\Debug\net9.0\GroomiBackend.genruntimeconfig.cache
 D:\לירוי\Websites\workTask\groomi-app\backend\GroomiBackend\obj\Debug\net9.0\ref\GroomiBackend.dll
+D:\לירוי\Websites\workTask\groomi-app\backend\GroomiBackend\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

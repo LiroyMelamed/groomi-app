@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useAuth } from "../../providers/AuthProvider";
+import api from "../../api/ApiUtils";
 
 export const GroomingQueueScreenName = '/GroomingQueueScreen';
 
@@ -15,21 +15,36 @@ export default function GroomingQueueScreen() {
     }, []);
 
     const fetchQueue = async () => {
-        const response = await axios.get("http://localhost:5088/api/GroomingQueue");
-        setQueue(response.data);
+        try {
+            console.log("Token being sent:", localStorage.getItem("token")); // ✅ Debugging log
+            const response = await api.get("/GroomingQueue");
+            setQueue(response.data);
+        } catch (error) {
+            console.error("Failed to fetch queue:", error.response?.data || error.message);
+        }
     };
 
     const handleAdd = async () => {
-        const newEntry = { customerName, appointmentTime };
-        await axios.post("http://localhost:5088/api/GroomingQueue", newEntry);
-        fetchQueue();
-        setCustomerName("");
-        setAppointmentTime("");
+        try {
+            const newEntry = { customerName, appointmentTime };
+            console.log("📤 Sending request:", newEntry); // ✅ Log request before sending
+            await api.post("/GroomingQueue", newEntry);
+            fetchQueue();
+            setCustomerName("");
+            setAppointmentTime("");
+        } catch (error) {
+            console.error("❌ Failed to add entry:", error.response?.data || error.message);
+        }
     };
 
+
     const handleDelete = async (id) => {
-        await axios.delete(`http://localhost:5088/api/GroomingQueue/${id}`);
-        fetchQueue();
+        try {
+            await api.delete(`/GroomingQueue/${id}`); // ✅ Now includes the JWT token
+            fetchQueue();
+        } catch (error) {
+            console.error("Failed to delete entry:", error.response?.data || error.message);
+        }
     };
 
     return (

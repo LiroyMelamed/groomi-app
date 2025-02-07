@@ -1,9 +1,8 @@
-using GroomiBackend.Data;
-using GroomiBackend.Models;
+﻿using GroomiBackend.Models;
+using GroomiBackend.Repositories;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
-
 
 namespace GroomiBackend.Controllers
 {
@@ -12,79 +11,82 @@ namespace GroomiBackend.Controllers
     [Route("api/[controller]")]
     public class GroomingQueueController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly GroomingQueueRepository groomingQueue;
 
-        public GroomingQueueController(AppDbContext context)
+        public GroomingQueueController(GroomingQueueRepository groomingQueue)
         {
-            _context = context;
+            this.groomingQueue = groomingQueue;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public IActionResult GetAll()
         {
-            var queue = await _context.GroomingQueue.ToListAsync();
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId)) return Unauthorized("User not authenticated.");
+
+            var queue = groomingQueue.GetByUserId(userId);
             return Ok(queue);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] GroomingQueue newEntry)
+        public IActionResult Add([FromBody] GroomingQueue newEntry)
         {
-            if (string.IsNullOrEmpty(newEntry.CustomerName))
-                return BadRequest("Customer name is required.");
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId)) return Unauthorized("User not authenticated.");
 
-            _context.GroomingQueue.Add(newEntry);
-            await _context.SaveChangesAsync();
-            return Ok(newEntry);
+            newEntry.UserId = userId;
+            groomingQueue.Add(newEntry);
+
+            return Ok(new { message = "Entry added successfully!", entry = newEntry });
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] GroomingQueue updatedEntry)
+        public IActionResult Update(int id, [FromBody] GroomingQueue updatedEntry)
         {
-            var existingEntry = await _context.GroomingQueue.FindAsync(id);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId)) return Unauthorized("User not authenticated.");
+
+            var existingEntry = groomingQueue.GetEntityById(id);
             if (existingEntry == null) return NotFound();
+            if (existingEntry.UserId != userId) return Forbid("You can only update your own entries.");
 
             existingEntry.CustomerName = updatedEntry.CustomerName;
             existingEntry.AppointmentTime = updatedEntry.AppointmentTime;
-            await _context.SaveChangesAsync();
+            groomingQueue.Update(existingEntry);
 
             return Ok(existingEntry);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public IActionResult Delete(int id)
         {
-            var entry = await _context.GroomingQueue.FindAsync(id);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId)) return Unauthorized("User not authenticated.");
+
+            var entry = groomingQueue.GetEntityById(id);
             if (entry == null) return NotFound();
+            if (entry.UserId != userId) return Forbid("You can only delete your own entries.");
 
-            _context.GroomingQueue.Remove(entry);
-            await _context.SaveChangesAsync();
-
-            return Ok();
+            groomingQueue.DeleteById(id);
+            return Ok(new { message = "Entry deleted successfully!" });
         }
 
         [HttpGet("filter")]
-public async Task<IActionResult> GetFiltered([FromQuery] string? name, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
-{
-    var query = _context.GroomingQueue.AsQueryable();
+        public IActionResult GetFiltered([FromQuery] string? name, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId)) return Unauthorized("User not authenticated.");
 
-    if (!string.IsNullOrEmpty(name))
-    {
-        query = query.Where(q => q.CustomerName.Contains(name));
-    }
+            var filteredEntries = groomingQueue.GetByDateRange(startDate ?? DateTime.MinValue, endDate ?? DateTime.MaxValue)
+                                               .Where(q => q.UserId == userId)
+                                               .ToList();
 
-    if (startDate.HasValue)
-    {
-        query = query.Where(q => q.AppointmentTime >= startDate.Value);
-    }
+            if (!string.IsNullOrEmpty(name))
+            {
+                filteredEntries = filteredEntries.Where(q => q.CustomerName.Contains(name)).ToList();
+            }
 
-    if (endDate.HasValue)
-    {
-        query = query.Where(q => q.AppointmentTime <= endDate.Value);
-    }
-
-    var result = await query.ToListAsync();
-    return Ok(result);
-}
-
+            return Ok(filteredEntries);
+        }
     }
 }

@@ -10,8 +10,12 @@ namespace GroomiBackend.Models
         public string CustomerName { get; set; }
 
         [Required]
-        public DateTime AppointmentTime { get; set; } // Time customer wants grooming
+        public DateTime AppointmentTime { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow; // When entry was created
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public string? UserId { get; set; }
+
+        public string? Description { get; set; }
     }
 }

@@ -8,22 +8,15 @@ import PrivateRoute from "./screens/PrivateRoute";
 
 function App() {
   return (
-    <Router>
-      <AuthProvider>
-        <Routes>
-          <Route path={LoginScreenName} element={<LoginScreen />} />
-          <Route path={RegisterScreenName} element={<RegisterScreen />} />
-          <Route
-            path={GroomingQueueScreenName}
-            element={
-              <PrivateRoute>
-                <GroomingQueueScreen />
-              </PrivateRoute>
-            }
-          />
-        </Routes>
-      </AuthProvider>
-    </Router>
+    <AuthProvider>
+      <Routes>
+        <Route path={LoginScreenName} element={<LoginScreen />} />
+        <Route path={RegisterScreenName} element={<RegisterScreen />} />
+        {/* <PrivateRoute> */}
+        <Route path={GroomingQueueScreenName} element={<GroomingQueueScreen />} />
+        {/* </PrivateRoute> */}
+      </Routes>
+    </AuthProvider>
   );
 }
 

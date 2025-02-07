@@ -1,0 +1,156 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\\u05DC\u05D9\u05E8\u05D5\u05D9\\Websites\\workTask\\groomi-app\\backend\\GroomiBackend\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{03AA75A5-87D3-486A-BE7C-19101BDEC10A}|GroomiBackend.csproj|d:\\\u05DC\u05D9\u05E8\u05D5\u05D9\\websites\\worktask\\groomi-app\\backend\\groomibackend\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03AA75A5-87D3-486A-BE7C-19101BDEC10A}|GroomiBackend.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{03AA75A5-87D3-486A-BE7C-19101BDEC10A}|GroomiBackend.csproj|d:\\\u05DC\u05D9\u05E8\u05D5\u05D9\\websites\\worktask\\groomi-app\\backend\\groomibackend\\controllers\\groomingqueuecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03AA75A5-87D3-486A-BE7C-19101BDEC10A}|GroomiBackend.csproj|solutionrelative:controllers\\groomingqueuecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{03AA75A5-87D3-486A-BE7C-19101BDEC10A}|GroomiBackend.csproj|d:\\\u05DC\u05D9\u05E8\u05D5\u05D9\\websites\\worktask\\groomi-app\\backend\\groomibackend\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03AA75A5-87D3-486A-BE7C-19101BDEC10A}|GroomiBackend.csproj|solutionrelative:controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{03AA75A5-87D3-486A-BE7C-19101BDEC10A}|GroomiBackend.csproj|d:\\\u05DC\u05D9\u05E8\u05D5\u05D9\\websites\\worktask\\groomi-app\\backend\\groomibackend\\models\\groomingqueue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03AA75A5-87D3-486A-BE7C-19101BDEC10A}|GroomiBackend.csproj|solutionrelative:models\\groomingqueue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{03AA75A5-87D3-486A-BE7C-19101BDEC10A}|GroomiBackend.csproj|d:\\\u05DC\u05D9\u05E8\u05D5\u05D9\\websites\\worktask\\groomi-app\\backend\\groomibackend\\reposetories\\groomingqueuerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03AA75A5-87D3-486A-BE7C-19101BDEC10A}|GroomiBackend.csproj|solutionrelative:reposetories\\groomingqueuerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{03AA75A5-87D3-486A-BE7C-19101BDEC10A}|GroomiBackend.csproj|d:\\\u05DC\u05D9\u05E8\u05D5\u05D9\\websites\\worktask\\groomi-app\\backend\\groomibackend\\reposetories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03AA75A5-87D3-486A-BE7C-19101BDEC10A}|GroomiBackend.csproj|solutionrelative:reposetories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{03AA75A5-87D3-486A-BE7C-19101BDEC10A}|GroomiBackend.csproj|d:\\\u05DC\u05D9\u05E8\u05D5\u05D9\\websites\\worktask\\groomi-app\\backend\\groomibackend\\reposetories\\repository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03AA75A5-87D3-486A-BE7C-19101BDEC10A}|GroomiBackend.csproj|solutionrelative:reposetories\\repository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{03AA75A5-87D3-486A-BE7C-19101BDEC10A}|GroomiBackend.csproj|d:\\\u05DC\u05D9\u05E8\u05D5\u05D9\\websites\\worktask\\groomi-app\\backend\\groomibackend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03AA75A5-87D3-486A-BE7C-19101BDEC10A}|GroomiBackend.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 7,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "GroomingQueue.cs",
+              "DocumentMoniker": "D:\\\u05DC\u05D9\u05E8\u05D5\u05D9\\Websites\\workTask\\groomi-app\\backend\\GroomiBackend\\Models\\GroomingQueue.cs",
+              "RelativeDocumentMoniker": "Models\\GroomingQueue.cs",
+              "ToolTip": "D:\\\u05DC\u05D9\u05E8\u05D5\u05D9\\Websites\\workTask\\groomi-app\\backend\\GroomiBackend\\Models\\GroomingQueue.cs",
+              "RelativeToolTip": "Models\\GroomingQueue.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-07T17:09:18.659Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "D:\\\u05DC\u05D9\u05E8\u05D5\u05D9\\Websites\\workTask\\groomi-app\\backend\\GroomiBackend\\Controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "Controllers\\UserController.cs",
+              "ToolTip": "D:\\\u05DC\u05D9\u05E8\u05D5\u05D9\\Websites\\workTask\\groomi-app\\backend\\GroomiBackend\\Controllers\\UserController.cs",
+              "RelativeToolTip": "Controllers\\UserController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAC4AAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-07T17:06:17.99Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "GroomingQueueController.cs",
+              "DocumentMoniker": "D:\\\u05DC\u05D9\u05E8\u05D5\u05D9\\Websites\\workTask\\groomi-app\\backend\\GroomiBackend\\Controllers\\GroomingQueueController.cs",
+              "RelativeDocumentMoniker": "Controllers\\GroomingQueueController.cs",
+              "ToolTip": "D:\\\u05DC\u05D9\u05E8\u05D5\u05D9\\Websites\\workTask\\groomi-app\\backend\\GroomiBackend\\Controllers\\GroomingQueueController.cs",
+              "RelativeToolTip": "Controllers\\GroomingQueueController.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABoAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-07T16:59:25.143Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "UserRepository.cs",
+              "DocumentMoniker": "D:\\\u05DC\u05D9\u05E8\u05D5\u05D9\\Websites\\workTask\\groomi-app\\backend\\GroomiBackend\\Reposetories\\UserRepository.cs",
+              "RelativeDocumentMoniker": "Reposetories\\UserRepository.cs",
+              "ToolTip": "D:\\\u05DC\u05D9\u05E8\u05D5\u05D9\\Websites\\workTask\\groomi-app\\backend\\GroomiBackend\\Reposetories\\UserRepository.cs",
+              "RelativeToolTip": "Reposetories\\UserRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-07T16:53:14.926Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\\u05DC\u05D9\u05E8\u05D5\u05D9\\Websites\\workTask\\groomi-app\\backend\\GroomiBackend\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "D:\\\u05DC\u05D9\u05E8\u05D5\u05D9\\Websites\\workTask\\groomi-app\\backend\\GroomiBackend\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-06T20:06:01.701Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Repository.cs",
+              "DocumentMoniker": "D:\\\u05DC\u05D9\u05E8\u05D5\u05D9\\Websites\\workTask\\groomi-app\\backend\\GroomiBackend\\Reposetories\\Repository.cs",
+              "RelativeDocumentMoniker": "Reposetories\\Repository.cs",
+              "ToolTip": "D:\\\u05DC\u05D9\u05E8\u05D5\u05D9\\Websites\\workTask\\groomi-app\\backend\\GroomiBackend\\Reposetories\\Repository.cs",
+              "RelativeToolTip": "Reposetories\\Repository.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAA8wEMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-06T19:34:11.098Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "GroomingQueueRepository.cs",
+              "DocumentMoniker": "D:\\\u05DC\u05D9\u05E8\u05D5\u05D9\\Websites\\workTask\\groomi-app\\backend\\GroomiBackend\\Reposetories\\GroomingQueueRepository.cs",
+              "RelativeDocumentMoniker": "Reposetories\\GroomingQueueRepository.cs",
+              "ToolTip": "D:\\\u05DC\u05D9\u05E8\u05D5\u05D9\\Websites\\workTask\\groomi-app\\backend\\GroomiBackend\\Reposetories\\GroomingQueueRepository.cs",
+              "RelativeToolTip": "Reposetories\\GroomingQueueRepository.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAgwBQAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-06T19:32:25.606Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "D:\\\u05DC\u05D9\u05E8\u05D5\u05D9\\Websites\\workTask\\groomi-app\\backend\\GroomiBackend\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
+              "ToolTip": "D:\\\u05DC\u05D9\u05E8\u05D5\u05D9\\Websites\\workTask\\groomi-app\\backend\\GroomiBackend\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "Controllers\\AuthController.cs",
+              "ViewState": "AgIAAE4AAAAAAAAAAADwv24AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-05T20:59:34.631Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
