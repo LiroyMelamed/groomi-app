@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 namespace GroomiBackend.Controllers
 {
-    [Authorize] // 🔐 Requires authentication
+    [Authorize] 
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : ControllerBase

@@ -15,11 +15,11 @@ export default function FredokaText({
         color,
         fontFamily,
         fontWeight,
-        alignItems: 'flex-end',
+        alignItems: 'center',
         display: 'flex',
+        whiteSpace: 'nowrap',
         ...style,
     };
-
 
     return (
         <SimpleText style={textStyle} size={size} {...restProps}>

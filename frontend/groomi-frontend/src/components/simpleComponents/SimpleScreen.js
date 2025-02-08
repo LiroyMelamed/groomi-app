@@ -11,7 +11,6 @@ export default function SimpleScreen({ backgroundImageSrc, children, style, othe
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         boxSizing: 'border-box',
-        padding: '8px 12px',
         ...style
     }
 
@@ -19,6 +18,8 @@ export default function SimpleScreen({ backgroundImageSrc, children, style, othe
         width: '100vw',
         height: '100vh',
         display: 'flex',
+        padding: '8px 12px',
+        flexDirection: 'column'
     };
 
     return (

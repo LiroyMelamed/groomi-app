@@ -1,80 +1,73 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useAuth } from "../../providers/AuthProvider";
-import api from "../../api/ApiUtils";
+import SimpleLoader from "../../components/simpleComponents/SimpleLoader";
+import Header from "../../components/designedComponents/Header";
+import PrimaryInput from "../../components/designedComponents/PrimaryInput";
+import TertiaryButton from "../../components/designedComponents/TertiaryButton";
+import SimpleScreen from "../../components/simpleComponents/SimpleScreen";
+import SimpleContainer from "../../components/simpleComponents/SimpleContainer";
+import GroomingQueueTable from "./components/GroomingQueueTable";
+import useAutoHttpRequest from "../../hooks/useAutoHttpRequest";
+import useHttpRequest from "../../hooks/useHttpRequest";
+import groomingQueueApi from "../../api/GroomingQueueApi";
 
-export const GroomingQueueScreenName = '/GroomingQueueScreen';
+export const GroomingQueueScreenName = "/GroomingQueueScreen";
 
 export default function GroomingQueueScreen() {
-    const [queue, setQueue] = useState([]);
     const [customerName, setCustomerName] = useState("");
     const [appointmentTime, setAppointmentTime] = useState("");
     const { logout } = useAuth();
 
-    useEffect(() => {
-        fetchQueue();
-    }, []);
+    const { result: queue, isPerforming: isFetching, performRequest: fetchQueue } = useAutoHttpRequest(groomingQueueApi.getQueue);
 
-    const fetchQueue = async () => {
-        try {
-            console.log("Token being sent:", localStorage.getItem("token")); // ✅ Debugging log
-            const response = await api.get("/GroomingQueue");
-            setQueue(response.data);
-        } catch (error) {
-            console.error("Failed to fetch queue:", error.response?.data || error.message);
-        }
-    };
+    const { performRequest: addAppointment, isPerforming: isAdding } = useHttpRequest(
+        groomingQueueApi.addEntry,
+        fetchQueue
+    );
 
-    const handleAdd = async () => {
-        try {
-            const newEntry = { customerName, appointmentTime };
-            console.log("📤 Sending request:", newEntry); // ✅ Log request before sending
-            await api.post("/GroomingQueue", newEntry);
-            fetchQueue();
-            setCustomerName("");
-            setAppointmentTime("");
-        } catch (error) {
-            console.error("❌ Failed to add entry:", error.response?.data || error.message);
-        }
-    };
+    const { performRequest: deleteAppointment, isPerforming: isDeleting } = useHttpRequest(
+        groomingQueueApi.deleteEntry,
+        fetchQueue
+    );
 
+    const { performRequest: updateAppointment, isPerforming: isUpdating } = useHttpRequest(
+        groomingQueueApi.updateEntry,
+        fetchQueue
+    );
 
-    const handleDelete = async (id) => {
-        try {
-            await api.delete(`/GroomingQueue/${id}`); // ✅ Now includes the JWT token
-            fetchQueue();
-        } catch (error) {
-            console.error("Failed to delete entry:", error.response?.data || error.message);
-        }
-    };
+    if (isFetching) return <SimpleLoader />;
 
     return (
-        <div>
-            <h2>Grooming Queue</h2>
-            <button onClick={logout} style={{ marginBottom: "20px" }}>
-                Logout
-            </button>
-            <div>
-                <input
-                    type="text"
-                    placeholder="Customer Name"
-                    value={customerName}
-                    onChange={(e) => setCustomerName(e.target.value)}
+        <SimpleScreen>
+            <SimpleContainer style={{ flexDirection: "column", width: "100%" }}>
+                <Header onLogout={logout} />
+
+                <SimpleContainer style={{ display: "flex", flexDirection: "row", marginTop: 24 }}>
+                    <PrimaryInput
+                        type="text"
+                        title="Customer Name"
+                        value={customerName}
+                        onChange={setCustomerName}
+                        style={{ flex: 1 }}
+                    />
+                    <PrimaryInput
+                        type="datetime-local"
+                        value={appointmentTime}
+                        onChange={setAppointmentTime}
+                        style={{ flex: 1 }}
+                    />
+                    <TertiaryButton onClick={() => addAppointment({ customerName, appointmentTime })} size="small" disabled={isAdding}>
+                        {isAdding ? "Adding..." : "Add to Queue"}
+                    </TertiaryButton>
+                </SimpleContainer>
+
+                <GroomingQueueTable
+                    queue={queue}
+                    handleDelete={deleteAppointment}
+                    handleUpdate={updateAppointment}
+                    isPerforming={isDeleting || isAdding || isUpdating}
                 />
-                <input
-                    type="datetime-local"
-                    value={appointmentTime}
-                    onChange={(e) => setAppointmentTime(e.target.value)}
-                />
-                <button onClick={handleAdd}>Add to Queue</button>
-            </div>
-            <ul>
-                {queue.map((entry) => (
-                    <li key={entry.id}>
-                        {entry.customerName} - {new Date(entry.appointmentTime).toLocaleString()}
-                        <button onClick={() => handleDelete(entry.id)}>Delete</button>
-                    </li>
-                ))}
-            </ul>
-        </div>
+            </SimpleContainer>
+        </SimpleScreen>
     );
 }

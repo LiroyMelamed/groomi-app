@@ -6,12 +6,15 @@ namespace GroomiBackend.Models
     [DataContract]
     public class GroomingQueueResponse : GeneralResponse
     {
-        [DataMember]
-        public List<GroomingQueue> Queue { get; set; }
-
         public GroomingQueueResponse(GeneralResponse parent, List<GroomingQueue> queue) : base(parent)
         {
-            Queue = queue;
+            Data = queue; 
+        }
+
+        public GroomingQueueResponse(bool success, string response, string requestLink, List<GroomingQueue> queue)
+            : base(success, response, requestLink)
+        {
+            Data = queue; 
         }
     }
 }

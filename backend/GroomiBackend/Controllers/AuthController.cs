@@ -77,7 +77,7 @@ namespace GroomiBackend.Controllers
                 var token = GenerateJwtToken(user);
                 HttpContext.Response.Headers.Add("Authorization", "Bearer " + token);
 
-                return new UserResponse(new GeneralResponse(true, "Login successful!", HttpContext.Request.Path), user);
+                return new UserResponse(new GeneralResponse(true, "Login successful!", HttpContext.Request.Path, token), user);
             }
             catch (Exception ex)
             {

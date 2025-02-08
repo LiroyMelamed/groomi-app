@@ -27,7 +27,7 @@ namespace GroomiBackend.Controllers
                 if (string.IsNullOrEmpty(userId))
                     return new GroomingQueueResponse(new GeneralResponse(false, "User not authenticated.", HttpContext.Request.Path), null);
 
-                var queue = groomingQueue.GetByUserId(userId);
+                var queue = groomingQueue.GetAll();
                 return new GroomingQueueResponse(new GeneralResponse(true, "Fetched successfully!", HttpContext.Request.Path), queue);
             }
             catch (Exception ex)
@@ -45,6 +45,11 @@ namespace GroomiBackend.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (string.IsNullOrEmpty(userId))
                     return new GeneralResponse(false, "User not authenticated.", HttpContext.Request.Path);
+
+                if (groomingQueue.CheckTimeOfAppointment(newEntry.AppointmentTime))
+                {
+                    return new GeneralResponse(false, "Appointment already taken", HttpContext.Request.Path);
+                }
 
                 newEntry.UserId = userId;
                 groomingQueue.Add(newEntry);

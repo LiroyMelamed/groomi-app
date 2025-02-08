@@ -15,4 +15,7 @@ export const colors = {
 
     text: "#444C68",
     disabledText: "#D0D3DD",
+
+    transparent: "transparent",
+    halfTransparentBlack: 'rgba(0, 0, 0, 0.5)',
 }
