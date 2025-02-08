@@ -1,6 +1,11 @@
 import api from "./ApiUtils";
 
 const groomingQueueApi = {
+    getQueueStoredProcedure: async () => {
+        const response = await api.get("/GroomingQueue/stored-procedure");
+        return response;
+    },
+
     getQueue: async () => {
         const response = await api.get("/GroomingQueue");
         return response;

@@ -12,7 +12,6 @@ export const AuthProvider = ({ children }) => {
     const login = (token) => {
         localStorage.setItem("token", token);
         setIsAuthenticated(true);
-        navigate(GroomingQueueScreenName); // Redirect to the queue page after login
     };
 
     const logout = () => {

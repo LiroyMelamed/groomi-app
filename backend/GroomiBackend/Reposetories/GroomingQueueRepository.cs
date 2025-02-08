@@ -1,17 +1,26 @@
 using GroomiBackend.Data;
 using GroomiBackend.Models;
-using GroomiBackend.Reposetories;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Dapper;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using GroomiBackend.Reposetories;
 
 namespace GroomiBackend.Repositories
 {
     public class GroomingQueueRepository : Repository<GroomingQueue>
     {
-        public GroomingQueueRepository(AppDbContext context) : base(context) { }
+        private readonly string _connectionString;
+
+        public GroomingQueueRepository(AppDbContext context, IConfiguration configuration) : base(context)
+        {
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
+        }
 
         protected override DbSet<GroomingQueue> GetTable(AppDbContext context)
         {
@@ -51,8 +60,41 @@ namespace GroomiBackend.Repositories
             return GetTable().Any(x => x.AppointmentTime >= minTime && x.AppointmentTime <= maxTime);
         }
 
+        public bool CheckTimeOfAppointmentIsInThePast(DateTime time)
+        {
+            if (time < DateTime.Now)
+            {
+                return true;
+            }
 
+            return false;
+        }
 
+        //NEED TO RUN QUEERY TO YOUR DATABASE
+
+        //USE YourDatabaseName; -- Change to your actual database name
+
+        //GO
+        //CREATE PROCEDURE GetGroomingQueue
+        //AS
+        //BEGIN
+        //    SET NOCOUNT ON;
+        //    SELECT* FROM GroomingQueue ORDER BY AppointmentTime ASC;
+        //END;
+        //GO
+
+        public List<GroomingQueue> GetGroomingQueueStoredProcedure()
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                var result = connection.Query<GroomingQueue>(
+                    "GetGroomingQueue",
+                    commandType: CommandType.StoredProcedure
+                );
+                return result.ToList();
+            }
+        }
 
     }
 }

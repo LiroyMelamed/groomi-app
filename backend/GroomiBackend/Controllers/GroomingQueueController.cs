@@ -18,6 +18,27 @@ namespace GroomiBackend.Controllers
             this.groomingQueue = groomingQueue;
         }
 
+        //SQL StoredProcedure
+        [HttpGet("stored-procedure")]
+        public GroomingQueueResponse GetAllUsingStoredProcedure()
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId))
+                    return new GroomingQueueResponse(new GeneralResponse(false, "User not authenticated.", HttpContext.Request.Path), null);
+
+                var queue = groomingQueue.GetGroomingQueueStoredProcedure(); // ✅ Use stored procedure
+                return new GroomingQueueResponse(new GeneralResponse(true, "Fetched successfully!", HttpContext.Request.Path), queue);
+            }
+            catch (Exception ex)
+            {
+                return new GroomingQueueResponse(new GeneralResponse(false, "Internal Server Error: " + ex.Message, HttpContext.Request.Path), null);
+            }
+        }
+
+
+
         [HttpGet]
         public GroomingQueueResponse GetAll()
         {
@@ -48,7 +69,12 @@ namespace GroomiBackend.Controllers
 
                 if (groomingQueue.CheckTimeOfAppointment(newEntry.AppointmentTime))
                 {
-                    return new GeneralResponse(false, "Appointment already taken", HttpContext.Request.Path);
+                    return new GeneralResponse(false, "Appointment has to be in half hour space between each other", HttpContext.Request.Path);
+                }
+
+                if (groomingQueue.CheckTimeOfAppointmentIsInThePast(newEntry.AppointmentTime))
+                {
+                    return new GeneralResponse(false, "Appointment can't be in the past", HttpContext.Request.Path);
                 }
 
                 newEntry.UserId = userId;
@@ -68,14 +94,25 @@ namespace GroomiBackend.Controllers
             try
             {
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
                 if (string.IsNullOrEmpty(userId))
                     return new GeneralResponse(false, "User not authenticated.", HttpContext.Request.Path);
+
+                if (groomingQueue.CheckTimeOfAppointment(updatedEntry.AppointmentTime))
+                {
+                    return new GeneralResponse(false, "Appointment has to be in half hour space between each other", HttpContext.Request.Path);
+                }
+
+                if (groomingQueue.CheckTimeOfAppointmentIsInThePast(updatedEntry.AppointmentTime))
+                {
+                    return new GeneralResponse(false, "Appointment can't be in the past", HttpContext.Request.Path);
+                }
 
                 var existingEntry = groomingQueue.GetEntityById(id);
                 if (existingEntry == null)
                     return new GeneralResponse(false, "Entry not found.", HttpContext.Request.Path);
 
-                if (existingEntry.UserId != userId)
+                if (existingEntry.UserId != userId && !User.IsInRole("admin"))
                     return new GeneralResponse(false, "You can only update your own entries.", HttpContext.Request.Path);
 
                 existingEntry.CustomerName = updatedEntry.CustomerName;
@@ -97,6 +134,8 @@ namespace GroomiBackend.Controllers
             try
             {
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+
                 if (string.IsNullOrEmpty(userId))
                     return new GeneralResponse(false, "User not authenticated.", HttpContext.Request.Path);
 
@@ -104,7 +143,7 @@ namespace GroomiBackend.Controllers
                 if (entry == null)
                     return new GeneralResponse(false, "Entry not found.", HttpContext.Request.Path);
 
-                if (entry.UserId != userId)
+                if (entry.UserId != userId && !User.IsInRole("admin"))
                     return new GeneralResponse(false, "You can only delete your own entries.", HttpContext.Request.Path);
 
                 groomingQueue.DeleteById(id);

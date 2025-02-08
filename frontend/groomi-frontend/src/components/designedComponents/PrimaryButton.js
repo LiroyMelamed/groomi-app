@@ -2,6 +2,7 @@ import React from "react";
 import SimpleButton from "../simpleComponents/SimpleButton";
 import SimpleImage from "../simpleComponents/SimpleImage";
 import { colors } from "../../constant/colors";
+import SimpleLoader from "../simpleComponents/SimpleLoader";
 
 export default function PrimaryButton({
     children,
@@ -11,6 +12,7 @@ export default function PrimaryButton({
     size = "medium", // small, medium, or large
     leftIcon,
     rightIcon,
+    isPerforming
 }) {
     const buttonStyles = {
         display: "flex",
@@ -38,9 +40,13 @@ export default function PrimaryButton({
             onClick={!disabled ? onClick : undefined}
             disabled={disabled}
         >
-            {leftIcon && <SimpleImage src={leftIcon} alt="left icon" style={iconStyle} />}
-            {children}
-            {rightIcon && <SimpleImage src={rightIcon} alt="right icon" style={iconStyle} />}
+            {isPerforming ? <SimpleLoader /> :
+                <>
+                    {leftIcon && <SimpleImage src={leftIcon} alt="left icon" style={iconStyle} />}
+                    {children}
+                    {rightIcon && <SimpleImage src={rightIcon} alt="right icon" style={iconStyle} />}
+                </>
+            }
         </SimpleButton>
     );
 }

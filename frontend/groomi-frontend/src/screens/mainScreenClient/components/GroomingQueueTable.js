@@ -75,7 +75,8 @@ export default function GroomingQueueTable({ queue, handleDelete, handleUpdate, 
                         >
                             <td style={styles.td}>{entry.customerName}</td>
                             <td style={styles.td}>
-                                {new Date(entry.appointmentTime).toLocaleString()}
+                                {new Date(entry.appointmentTime).toLocaleString("en-IL", { timeZone: "Asia/Jerusalem" })
+                                }
                             </td>
                             <td style={styles.td}>
                                 <PrimaryButton

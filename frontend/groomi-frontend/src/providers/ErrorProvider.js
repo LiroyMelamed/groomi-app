@@ -18,7 +18,6 @@ export function ErrorProvider({ children }) {
         <ErrorContext.Provider value={{ showError }}>
             {children}
             <SimplePopup isOpen={!!error} onClose={hideError}>
-                <h3>Error</h3>
                 <p>{error}</p>
             </SimplePopup>
         </ErrorContext.Provider>

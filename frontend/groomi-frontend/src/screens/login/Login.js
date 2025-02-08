@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { useAuth } from "../../providers/AuthProvider";
 import SimpleScreen from "../../components/simpleComponents/SimpleScreen";
 import SimpleContainer from "../../components/simpleComponents/SimpleContainer";
 import PrimaryCard from "../../components/designedComponents/PrimaryCard";
-import SimpleInput from "../../components/simpleComponents/SimpleInput";
 import PrimaryInput from "../../components/designedComponents/PrimaryInput";
 import { TextBold40 } from "../../components/specialComponents/text/AllTextKindFile";
 import useScreenSize from "../../hooks/useScreenSize";
@@ -15,6 +12,9 @@ import { useNavigate } from "react-router-dom";
 import { GroomingQueueScreenName } from "../mainScreenClient/GroomingQueue";
 import TertiaryButton from "../../components/designedComponents/TertiaryButton";
 import { RegisterScreenName } from "../register/Register";
+import useHttpRequest from "../../hooks/useHttpRequest";
+import loginApi from "../../api/LoginApi";
+import { useAuth } from "../../providers/AuthProvider";
 
 export const LoginScreenName = "/LoginScreen";
 
@@ -25,26 +25,13 @@ export default function LoginScreen() {
     const { isSmallScreen } = useScreenSize();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
-    const { login } = useAuth();
+    const [inputError, setInputError] = useState("");
+    const { login } = useAuth()
 
-    const handleLogin = async () => {
-        try {
-            const response = await axios.post("http://localhost:5088/api/Auth/login", {
-                username,
-                passwordHash: password,
-            });
-
-            const { data } = response.data;
-            if (!data) throw new Error("Token not received from server.");
-
-            login(data);
-            navigate(GroomingQueueScreenName)
-        } catch (err) {
-            console.error("Login failed:", err.response?.data || err.message);
-            setError(err.response?.data || "An error occurred. Please try again.");
-        }
-    };
+    const { performRequest: loginRequest, isPerforming } = useHttpRequest(loginApi.login, (data) => {
+        login(data);
+        navigate(GroomingQueueScreenName)
+    });
 
     return (
         <SimpleScreen style={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -71,7 +58,7 @@ export default function LoginScreen() {
                     />
 
                     <SimpleContainer>
-                        <PrimaryButton style={{ marginTop: 24 }} onClick={handleLogin}>Login</PrimaryButton>
+                        <PrimaryButton isPerforming={isPerforming} style={{ marginTop: 24 }} onClick={() => loginRequest(username, password)}>Login</PrimaryButton>
 
                         <TertiaryButton style={{ marginTop: 24, marginLeft: 8 }} onClick={() => navigate(RegisterScreenName)}>Register</TertiaryButton>
                     </SimpleContainer>

@@ -27,7 +27,7 @@ api.interceptors.response.use(
         const formattedError = {
             status: error.response?.status || 500,
             data: error.response?.data?.data || null,
-            requestLink: error.response?.data?.requestLink || error.config.url,
+            requestLink: error.response?.data?.requestLink || error.config?.url,
             response: error.response?.data?.response || error.message,
             success: false,
         };

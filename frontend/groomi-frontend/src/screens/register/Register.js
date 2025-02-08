@@ -12,6 +12,8 @@ import { images } from "../../assets/images/images";
 import { useNavigate } from "react-router-dom";
 import useScreenSize from "../../hooks/useScreenSize";
 import { LoginScreenName } from "../login/Login";
+import loginApi from "../../api/LoginApi";
+import useHttpRequest from "../../hooks/useHttpRequest";
 
 export const RegisterScreenName = '/RegisterScreen';
 const APP_TITLE = 'Groomi'
@@ -23,19 +25,7 @@ export default function RegisterScreen() {
     const [password, setPassword] = useState("");
     const [fullName, setFullName] = useState("");
 
-    const handleRegister = async () => {
-        try {
-            const response = await axios.post("http://localhost:5088/api/Auth/register", {
-                username,
-                passwordHash: password, // Fix: Send password as `passwordHash`
-                fullName,
-            });
-            alert("Registration successful! You can now log in.");
-            navigate(LoginScreenName)
-        } catch (error) {
-            alert("Registration failed. Please try again.");
-        }
-    };
+    const { performRequest: registerRequest, isPerforming } = useHttpRequest(loginApi.register, () => { navigate(LoginScreenName) });
 
     return (
         <SimpleScreen style={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -71,7 +61,7 @@ export default function RegisterScreen() {
                     />
 
                     <SimpleContainer>
-                        <PrimaryButton style={{ marginTop: 24 }} onClick={handleRegister}>Register</PrimaryButton>
+                        <PrimaryButton style={{ marginTop: 24 }} onClick={() => registerRequest(username, password, fullName)}>Register</PrimaryButton>
 
                         <TertiaryButton style={{ marginTop: 24, marginLeft: 8 }} onClick={() => navigate(LoginScreenName)}>Allready Registered?</TertiaryButton>
                     </SimpleContainer>

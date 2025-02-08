@@ -1,14 +1,19 @@
 import { useState } from "react";
 import { useError } from "../providers/ErrorProvider";
+import { useSuccess } from "../providers/SuccessProvider";
 
 const useHttpRequest = (requestFunction, onSuccess, onFailure) => {
     const [result, setResult] = useState(null);
     const [isPerforming, setIsPerforming] = useState(false);
     const { showError } = useError();
+    const { showSuccess } = useSuccess();
 
     const defaultOnFailure = (error) => {
-        console.log('error', error);
         showError(error.response || "An unexpected error occurred.");
+    };
+
+    const defaultOnSuccess = (success) => {
+        showSuccess(success.response || "Success");
     };
 
     const performRequest = async (...args) => {
@@ -22,7 +27,7 @@ const useHttpRequest = (requestFunction, onSuccess, onFailure) => {
                 if (onFailure) onFailure(respone);
                 else defaultOnFailure(respone);
             }
-            if (onSuccess) onSuccess(respone.data);
+            if (onSuccess) { onSuccess(respone.data) } else { defaultOnSuccess(respone.data) };
         } catch (err) {
             if (onFailure) onFailure(err);
             else defaultOnFailure(err);

@@ -18,7 +18,8 @@ export default function GroomingQueueScreen() {
     const [appointmentTime, setAppointmentTime] = useState("");
     const { logout } = useAuth();
 
-    const { result: queue, isPerforming: isFetching, performRequest: fetchQueue } = useAutoHttpRequest(groomingQueueApi.getQueue);
+    // const { result: queue, isPerforming: isFetching, performRequest: fetchQueue } = useAutoHttpRequest(groomingQueueApi.getQueue);
+    const { result: queue, isPerforming: isFetching, performRequest: fetchQueue } = useAutoHttpRequest(groomingQueueApi.getQueueStoredProcedure, { onSuccess: () => { } }); //StoredProcedure
 
     const { performRequest: addAppointment, isPerforming: isAdding } = useHttpRequest(
         groomingQueueApi.addEntry,
