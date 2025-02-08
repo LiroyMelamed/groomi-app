@@ -27,23 +27,40 @@ cd groomi-app
 ```
 
 ---
-## Frontend Setup
+## Backend Setup
 
-### Navigate to Frontend Directory
+### Navigate to Backend Directory
 ```sh
-cd frontend
+cd backend/GroomiBackend
 ```
 
-### Install Dependencies
-```sh
-npm install
-```
+### Configure the Database
+1. Open **`appsettings.json`** and set your database connection string under `ConnectionStrings`:
+    ```json
+    "ConnectionStrings": {
+        "DefaultConnection": "Server=localhost;Database=GroomiDB;Trusted_Connection=True;"
+    }
+    ```
+2. Run the following commands to apply migrations and seed the database:
+    ```sh
+    dotnet ef database update
+    ```
+3. (Optional) If needed, create the database manually in SQL Server and execute stored procedures:
+    ```sql
+    CREATE PROCEDURE GetGroomingQueue
+    AS
+    BEGIN
+        SELECT * FROM GroomingQueue ORDER BY AppointmentTime ASC;
+    END;
+    ```
 
-### Start the Development Server
+### Run the Backend Server
 ```sh
-npm start
+dotnet run
 ```
-- The React app will be available at: `http://localhost:3000`
+- The API will be available at: `http://localhost:5088/api`
+
+---
 
 ### Environment Variables (Optional)
 Create a `.env` file to configure API base URL:
