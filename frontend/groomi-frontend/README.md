@@ -1,70 +1,117 @@
-# Getting Started with Create React App
+# Groomi App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Welcome to Groomi App! This project is a full-stack web application for managing a grooming queue. It consists of:
+- **Frontend**: React.js
+- **Backend**: .NET Core (C#) with SQL Server
 
-## Available Scripts
+## Table of Contents
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Backend Setup](#backend-setup)
+- [Frontend Setup](#frontend-setup)
+- [API Endpoints](#api-endpoints)
+- [Usage](#usage)
 
-In the project directory, you can run:
+## Prerequisites
+- Node.js (Latest LTS Version)
+- npm (Node Package Manager)
+- .NET 6 or higher
+- SQL Server (LocalDB or a remote instance)
 
-### `npm start`
+---
+## Installation
+### Clone the Repository
+```sh
+git clone https://github.com/LiroyMelamed/groomi-app.git
+cd groomi-app
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
+## Backend Setup
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Navigate to Backend Directory
+```sh
+cd backend/GroomiBackend
+```
 
-### `npm test`
+### Configure the Database
+1. Open **`appsettings.json`** and set your database connection string under `ConnectionStrings`:
+    ```json
+    "ConnectionStrings": {
+        "DefaultConnection": "Server=localhost;Database=GroomiDB;Trusted_Connection=True;"
+    }
+    ```
+2. Run the following commands to apply migrations and seed the database:
+    ```sh
+    dotnet ef database update
+    ```
+3. (Optional) If needed, create the database manually in SQL Server and execute stored procedures:
+    ```sql
+    CREATE PROCEDURE GetGroomingQueue
+    AS
+    BEGIN
+        SELECT * FROM GroomingQueue ORDER BY AppointmentTime ASC;
+    END;
+    ```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Run the Backend Server
+```sh
+dotnet run
+```
+- The API will be available at: `http://localhost:5088/api`
 
-### `npm run build`
+---
+## Frontend Setup
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Navigate to Frontend Directory
+```sh
+cd frontend
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Install Dependencies
+```sh
+npm install
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Start the Development Server
+```sh
+npm start
+```
+- The React app will be available at: `http://localhost:3000`
 
-### `npm run eject`
+### Environment Variables (Optional)
+Create a `.env` file to configure API base URL:
+```env
+REACT_APP_API_URL=http://localhost:5088/api
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
+## API Endpoints
+### Authentication
+- `POST /api/Auth/register` → Register a new user
+- `POST /api/Auth/login` → Authenticate and retrieve a token
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Grooming Queue
+- `GET /api/GroomingQueue` → Fetch all appointments
+- `POST /api/GroomingQueue` → Add a new appointment
+- `PUT /api/GroomingQueue/{id}` → Update an appointment
+- `DELETE /api/GroomingQueue/{id}` → Delete an appointment
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
+## Usage
+1. **Login/Register** in the app.
+2. **Add an Appointment** with a customer name and appointment time.
+3. **View, Edit, or Delete** appointments via the dashboard.
+4. **Filter appointments** based on time or customer name.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
+## Contributions
+Feel free to fork and contribute to this project!
 
-## Learn More
+## License
+MIT License. See `LICENSE` file for more details.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
+### Issues
+If you encounter any issues, open an issue on GitHub: [Issue Tracker](https://github.com/LiroyMelamed/groomi-app/issues)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
