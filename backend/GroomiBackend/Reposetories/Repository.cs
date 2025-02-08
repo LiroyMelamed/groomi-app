@@ -1,4 +1,4 @@
-﻿using GroomiBackend.Data;
+using GroomiBackend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 

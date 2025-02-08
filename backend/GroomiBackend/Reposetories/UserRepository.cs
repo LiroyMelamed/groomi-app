@@ -1,4 +1,4 @@
-﻿using GroomiBackend.Data;
+using GroomiBackend.Data;
 using GroomiBackend.Models;
 using GroomiBackend.Reposetories;
 using Microsoft.EntityFrameworkCore;
