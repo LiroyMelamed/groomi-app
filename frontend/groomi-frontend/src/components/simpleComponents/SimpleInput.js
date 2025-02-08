@@ -1,4 +1,4 @@
-export default function SimpleInput({ placeholder, type, value, onChange, maxLength, otherProps }) {
+export default function SimpleInput({ placeholder, type, value, onChange, maxLength, style, otherProps }) {
 
     function onValueInputed(e) {
         onChange?.(e.target.value)
@@ -11,6 +11,7 @@ export default function SimpleInput({ placeholder, type, value, onChange, maxLen
             value={value}
             onChange={onValueInputed}
             maxLength={maxLength}
+            style={style}
             {...otherProps}
         />
     );

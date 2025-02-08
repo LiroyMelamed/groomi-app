@@ -4,7 +4,6 @@ import { colors } from '../../constant/colors';
 import SimpleContainer from '../simpleComponents/SimpleContainer';
 import SimpleIcon from '../simpleComponents/SimpleIcon';
 
-
 export default function PrimaryInput({
     title,
     titleFontSize = 16,
@@ -38,13 +37,13 @@ export default function PrimaryInput({
     }
 
     function handleFocus() {
-        onFocus?.()
-        setIsFocused(true)
+        onFocus?.();
+        setIsFocused(true);
     }
 
     function handleBlur(event) {
-        onBlur?.(event)
-        setIsFocused(false)
+        onBlur?.(event);
+        setIsFocused(false);
     }
 
     return (
@@ -59,18 +58,48 @@ export default function PrimaryInput({
                 borderRadius: 12,
                 margin: '8px',
                 boxShadow: isFocused ? '0 0 4px rgba(0, 0, 0, 0.2)' : 'none',
-                direction: 'rtl',
                 height: sizeStyles.height,
+                textAlign: 'left', // ✅ Ensures LTR behavior
                 ...style,
             }}
         >
+            {leftIcon && (
+                <SimpleIcon
+                    tintColor={tintColor || getBorderColor()}
+                    src={leftIcon}
+                    style={{ ...IconStyle, marginRight: '8px' }} // ✅ Adjusted for LTR
+                />
+            )}
+
+            <SimpleInput
+                type="text"
+                style={{
+                    flex: 1,
+                    padding: rightIcon ? `10px 10px 10px ${sizeStyles.padding}` : sizeStyles.padding,
+                    paddingLeft: leftIcon ? '30px' : sizeStyles.padding,
+                    border: 'none',
+                    backgroundColor: 'transparent',
+                    outline: 'none',
+                    fontSize: sizeStyles.fontSize,
+                    color: disabled ? colors.disabledText : colors.text,
+                    textAlign: 'left', // ✅ Ensures LTR behavior
+                    minWidth: '0',
+                }}
+                value={value}
+                onChange={onChange}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+                disabled={disabled}
+                {...otherProps}
+            />
+
             {title && (
                 <span
                     style={{
                         ...styles.floatingLabel,
                         fontSize: titleFontSize,
-                        fontFamily: 'Fredoka', // Ensures font is Fredoka for the input field
-                        right: rightIcon ? '40px' : '15px',
+                        fontFamily: 'Fredoka',
+                        left: leftIcon ? '40px' : '15px', // ✅ Adjusted for LTR
                         top: sizeStyles.labelTop,
                         borderRadius: 10000,
                         transform: isFocused || value ? sizeStyles.transformFocused : 'translateY(-50%)',
@@ -86,38 +115,7 @@ export default function PrimaryInput({
                 <SimpleIcon
                     tintColor={tintColor || getBorderColor()}
                     src={rightIcon}
-                    style={{ ...IconStyle, marginRight: '8px' }}
-                />
-            )}
-
-            <SimpleInput
-                type="text"
-                style={{
-                    flex: 1,
-                    padding: leftIcon ? `20px ${sizeStyles.padding} 10px 10px` : sizeStyles.padding,
-                    paddingRight: rightIcon ? '30px' : sizeStyles.padding,
-                    border: 'none',
-                    backgroundColor: 'transparent',
-                    outline: 'none',
-                    fontSize: sizeStyles.fontSize,
-                    color: disabled ? colors.disabledText : colors.text,
-                    textAlign: 'right',
-                    minWidth: '0',
-                    ...textStyle,
-                }}
-                value={value}
-                onChange={onChange}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                disabled={disabled}
-                {...otherProps}
-            />
-
-            {leftIcon && (
-                <SimpleIcon
-                    tintColor={tintColor || getBorderColor()}
-                    src={leftIcon}
-                    style={{ ...IconStyle, marginLeft: '8px' }}
+                    style={{ ...IconStyle, marginLeft: '8px' }} // ✅ Adjusted for LTR
                 />
             )}
         </SimpleContainer>
@@ -146,7 +144,6 @@ export const inputStyles = {
         fontSize: 12,
         padding: '8px',
         labelTop: '50%',
-        borderStyle: 'solid',
         transformFocused: 'translateY(-150%) scale(0.8)',
     },
     Medium: {
@@ -154,7 +151,6 @@ export const inputStyles = {
         fontSize: 16,
         padding: '16px',
         labelTop: '50%',
-        borderStyle: 'solid',
         transformFocused: 'translateY(-150%) scale(0.8)',
     },
     Big: {

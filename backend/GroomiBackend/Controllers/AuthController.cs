@@ -1,13 +1,11 @@
-using GroomiBackend.Data;
-using GroomiBackend.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-
+using GroomiBackend.Models;
+using GroomiBackend.Repositories;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace GroomiBackend.Controllers
 {
@@ -15,84 +13,100 @@ namespace GroomiBackend.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly AuthRepository users;
         private readonly IConfiguration _config;
 
-        public AuthController(AppDbContext context, IConfiguration config)
+        public AuthController(AuthRepository users, IConfiguration config)
         {
-            _context = context;
+            this.users = users;
             _config = config;
         }
 
-        [AllowAnonymous] 
+        [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+        public GeneralResponse Register([FromBody] RegisterRequest request)
         {
-            if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.PasswordHash))
+            try
             {
-                return BadRequest("Username and Password are required.");
+                if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.PasswordHash))
+                {
+                    return new GeneralResponse(false, "Username and Password are required.", HttpContext.Request.Path);
+                }
+
+                var hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.PasswordHash);
+
+                var checkUserName = users.GetUserByUsername(request.Username);
+                if (checkUserName != null)
+                {
+                    return new GeneralResponse(false, "Username is already taken.", HttpContext.Request.Path);
+                }
+
+                var user = new User
+                {
+                    Username = request.Username,
+                    PasswordHash = hashedPassword,
+                    FullName = request.FullName,
+                    Role = request.Role,
+                };
+
+                users.Add(user);
+                users.Update(user);
+
+                return new GeneralResponse(true, "User registered successfully!", HttpContext.Request.Path);
             }
-
-            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.PasswordHash);
-
-            if (await _context.Users.AnyAsync(u => u.Username == request.Username))
+            catch (Exception ex)
             {
-                return Conflict("Username is already taken.");
+                return new GeneralResponse(false, "Internal Server Error: " + ex.Message, HttpContext.Request.Path);
             }
-
-            var user = new User
-            {
-                Username = request.Username,
-                PasswordHash = hashedPassword,
-                FullName = request.FullName
-            };
-
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            return Ok("User registered successfully!");
         }
+
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        public UserResponse Login([FromBody] LoginRequest request)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
-
-            if (user == null || !BCrypt.Net.BCrypt.Verify(request.PasswordHash, user.PasswordHash))
+            try
             {
-                return Unauthorized("Invalid username or password.");
+                var user = users.GetUserByUsername(request.Username);
+
+                if (user == null || !BCrypt.Net.BCrypt.Verify(request.PasswordHash, user.PasswordHash))
+                {
+                    return new UserResponse(new GeneralResponse(false, "Invalid username or password.", HttpContext.Request.Path), null);
+                }
+
+                var token = GenerateJwtToken(user);
+                HttpContext.Response.Headers.Add("Authorization", "Bearer " + token);
+
+                return new UserResponse(new GeneralResponse(true, "Login successful!", HttpContext.Request.Path), user);
             }
-
-            // ✅ Generate JWT Token
-            var token = GenerateJwtToken(user);
-
-            return Ok(new { token });
+            catch (Exception ex)
+            {
+                return new UserResponse(new GeneralResponse(false, "Internal Server Error: " + ex.Message, HttpContext.Request.Path), null);
+            }
         }
 
-private string GenerateJwtToken(User user)
-{
-    var key = Encoding.UTF8.GetBytes(_config["JwtSettings:Secret"]);
-    var claims = new[]
-    {
-        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), 
-        new Claim(ClaimTypes.Name, user.Username)
-    };
+        private string GenerateJwtToken(User user)
+        {
+            var key = Encoding.UTF8.GetBytes(_config["JwtSettings:Secret"]);
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Username)
+            };
 
-    var tokenDescriptor = new SecurityTokenDescriptor
-    {
-        Subject = new ClaimsIdentity(claims),
-        Expires = DateTime.UtcNow.AddMinutes(Convert.ToInt32(_config["JwtSettings:ExpirationInMinutes"])),
-        Issuer = _config["JwtSettings:Issuer"],
-        Audience = _config["JwtSettings:Audience"],
-        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
-    };
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddMinutes(Convert.ToInt32(_config["JwtSettings:ExpirationInMinutes"])),
+                Issuer = _config["JwtSettings:Issuer"],
+                Audience = _config["JwtSettings:Audience"],
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
+            };
 
-    var tokenHandler = new JwtSecurityTokenHandler();
-    var token = tokenHandler.CreateToken(tokenDescriptor);
-    return tokenHandler.WriteToken(token);
-}
-
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
     }
 
     public class RegisterRequest
@@ -100,6 +114,7 @@ private string GenerateJwtToken(User user)
         public string Username { get; set; }
         public string PasswordHash { get; set; }
         public string FullName { get; set; }
+        public string Role { get; set; } = "user";
     }
 
     public class LoginRequest

@@ -2,6 +2,7 @@
 using GroomiBackend.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace GroomiBackend.Controllers
 {
@@ -18,43 +19,87 @@ namespace GroomiBackend.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllUsers()
+        public GeneralResponse GetAllUsers()
         {
-            var users = userRepository.GetAll();
-            return Ok(users);
+            try
+            {
+                var users = userRepository.GetAll();
+                return new GeneralResponse(true, "Users retrieved successfully.", HttpContext.Request.Path, users);
+            }
+            catch (Exception ex)
+            {
+                return new GeneralResponse(false, "Internal Server Error: " + ex.Message, HttpContext.Request.Path);
+            }
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetUserById(int id)
+        public GeneralResponse GetUserById(int id)
         {
-            var user = userRepository.GetUserById(id);
-            if (user == null) return NotFound("User not found.");
-            return Ok(user);
+            try
+            {
+                var user = userRepository.GetUserById(id);
+                if (user == null)
+                {
+                    return new GeneralResponse(false, "User not found.", HttpContext.Request.Path);
+                }
+
+                return new GeneralResponse(true, "User retrieved successfully.", HttpContext.Request.Path, user);
+            }
+            catch (Exception ex)
+            {
+                return new GeneralResponse(false, "Internal Server Error: " + ex.Message, HttpContext.Request.Path);
+            }
         }
 
         [HttpGet("me")]
-        public IActionResult GetCurrentUser()
+        public GeneralResponse GetCurrentUser()
         {
-            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userId)) return Unauthorized("User not authenticated.");
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return new GeneralResponse(false, "User not authenticated.", HttpContext.Request.Path);
+                }
 
-            var user = userRepository.GetUserById(int.Parse(userId));
-            if (user == null) return NotFound("User not found.");
+                var user = userRepository.GetUserById(int.Parse(userId));
+                if (user == null)
+                {
+                    return new GeneralResponse(false, "User not found.", HttpContext.Request.Path);
+                }
 
-            return Ok(user);
+                return new GeneralResponse(true, "Current user retrieved successfully.", HttpContext.Request.Path, user);
+            }
+            catch (Exception ex)
+            {
+                return new GeneralResponse(false, "Internal Server Error: " + ex.Message, HttpContext.Request.Path);
+            }
         }
 
         [HttpDelete("me")]
-        public IActionResult DeleteCurrentUser()
+        public GeneralResponse DeleteCurrentUser()
         {
-            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userId)) return Unauthorized("User not authenticated.");
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return new GeneralResponse(false, "User not authenticated.", HttpContext.Request.Path);
+                }
 
-            var user = userRepository.GetUserById(int.Parse(userId));
-            if (user == null) return NotFound("User not found.");
+                var user = userRepository.GetUserById(int.Parse(userId));
+                if (user == null)
+                {
+                    return new GeneralResponse(false, "User not found.", HttpContext.Request.Path);
+                }
 
-            userRepository.DeleteById(user.Id);
-            return Ok(new { message = "Account deleted successfully!" });
+                userRepository.DeleteById(user.Id);
+                return new GeneralResponse(true, "Account deleted successfully!", HttpContext.Request.Path);
+            }
+            catch (Exception ex)
+            {
+                return new GeneralResponse(false, "Internal Server Error: " + ex.Message, HttpContext.Request.Path);
+            }
         }
     }
 }

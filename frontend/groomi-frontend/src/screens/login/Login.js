@@ -38,8 +38,8 @@ export default function LoginScreen() {
             style={{ justifyContent: 'center' }}
         >
             <SimpleContainer style={{ flexDirection: 'row' }}>
-
                 <PrimaryCard style={{ flexDirection: 'column' }}>
+                    
                     <PrimaryInput
                         type="text"
                         title="Username"

@@ -19,74 +19,96 @@ namespace GroomiBackend.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public GroomingQueueResponse GetAll()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userId)) return Unauthorized("User not authenticated.");
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId))
+                    return new GroomingQueueResponse(new GeneralResponse(false, "User not authenticated.", HttpContext.Request.Path), null);
 
-            var queue = groomingQueue.GetByUserId(userId);
-            return Ok(queue);
+                var queue = groomingQueue.GetByUserId(userId);
+                return new GroomingQueueResponse(new GeneralResponse(true, "Fetched successfully!", HttpContext.Request.Path), queue);
+            }
+            catch (Exception ex)
+            {
+                return new GroomingQueueResponse(new GeneralResponse(false, "Internal Server Error: " + ex.Message, HttpContext.Request.Path), null);
+            }
         }
 
+
         [HttpPost]
-        public IActionResult Add([FromBody] GroomingQueue newEntry)
+        public GeneralResponse Add([FromBody] GroomingQueue newEntry)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userId)) return Unauthorized("User not authenticated.");
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId))
+                    return new GeneralResponse(false, "User not authenticated.", HttpContext.Request.Path);
 
-            newEntry.UserId = userId;
-            groomingQueue.Add(newEntry);
+                newEntry.UserId = userId;
+                groomingQueue.Add(newEntry);
 
-            return Ok(new { message = "Entry added successfully!", entry = newEntry });
+                return new GeneralResponse(true, "Entry added successfully!", HttpContext.Request.Path);
+            }
+            catch (Exception ex)
+            {
+                return new GeneralResponse(false, "Internal Server Error: " + ex.Message, HttpContext.Request.Path);
+            }
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] GroomingQueue updatedEntry)
+        public GeneralResponse Update(int id, [FromBody] GroomingQueue updatedEntry)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userId)) return Unauthorized("User not authenticated.");
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId))
+                    return new GeneralResponse(false, "User not authenticated.", HttpContext.Request.Path);
 
-            var existingEntry = groomingQueue.GetEntityById(id);
-            if (existingEntry == null) return NotFound();
-            if (existingEntry.UserId != userId) return Forbid("You can only update your own entries.");
+                var existingEntry = groomingQueue.GetEntityById(id);
+                if (existingEntry == null)
+                    return new GeneralResponse(false, "Entry not found.", HttpContext.Request.Path);
 
-            existingEntry.CustomerName = updatedEntry.CustomerName;
-            existingEntry.AppointmentTime = updatedEntry.AppointmentTime;
-            groomingQueue.Update(existingEntry);
+                if (existingEntry.UserId != userId)
+                    return new GeneralResponse(false, "You can only update your own entries.", HttpContext.Request.Path);
 
-            return Ok(existingEntry);
+                existingEntry.CustomerName = updatedEntry.CustomerName;
+                existingEntry.AppointmentTime = updatedEntry.AppointmentTime;
+                existingEntry.Description = updatedEntry.Description;
+                groomingQueue.Update(existingEntry);
+
+                return new GeneralResponse(true, "Entry updated successfully!", HttpContext.Request.Path);
+            }
+            catch (Exception ex)
+            {
+                return new GeneralResponse(false, "Internal Server Error: " + ex.Message, HttpContext.Request.Path);
+            }
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public GeneralResponse Delete(int id)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userId)) return Unauthorized("User not authenticated.");
-
-            var entry = groomingQueue.GetEntityById(id);
-            if (entry == null) return NotFound();
-            if (entry.UserId != userId) return Forbid("You can only delete your own entries.");
-
-            groomingQueue.DeleteById(id);
-            return Ok(new { message = "Entry deleted successfully!" });
-        }
-
-        [HttpGet("filter")]
-        public IActionResult GetFiltered([FromQuery] string? name, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
-        {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userId)) return Unauthorized("User not authenticated.");
-
-            var filteredEntries = groomingQueue.GetByDateRange(startDate ?? DateTime.MinValue, endDate ?? DateTime.MaxValue)
-                                               .Where(q => q.UserId == userId)
-                                               .ToList();
-
-            if (!string.IsNullOrEmpty(name))
+            try
             {
-                filteredEntries = filteredEntries.Where(q => q.CustomerName.Contains(name)).ToList();
-            }
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId))
+                    return new GeneralResponse(false, "User not authenticated.", HttpContext.Request.Path);
 
-            return Ok(filteredEntries);
+                var entry = groomingQueue.GetEntityById(id);
+                if (entry == null)
+                    return new GeneralResponse(false, "Entry not found.", HttpContext.Request.Path);
+
+                if (entry.UserId != userId)
+                    return new GeneralResponse(false, "You can only delete your own entries.", HttpContext.Request.Path);
+
+                groomingQueue.DeleteById(id);
+                return new GeneralResponse(true, "Entry deleted successfully!", HttpContext.Request.Path);
+            }
+            catch (Exception ex)
+            {
+                return new GeneralResponse(false, "Internal Server Error: " + ex.Message, HttpContext.Request.Path);
+            }
         }
     }
 }
