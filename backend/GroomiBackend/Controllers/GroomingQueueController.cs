@@ -67,7 +67,7 @@ namespace GroomiBackend.Controllers
                 if (string.IsNullOrEmpty(userId))
                     return new GeneralResponse(false, "User not authenticated.", HttpContext.Request.Path);
 
-                if (groomingQueue.CheckTimeOfAppointment(newEntry.AppointmentTime))
+                if (groomingQueue.CheckTimeOfAppointment(newEntry.AppointmentTime, newEntry.Id))
                 {
                     return new GeneralResponse(false, "Appointment has to be in half hour space between each other", HttpContext.Request.Path);
                 }
@@ -98,7 +98,7 @@ namespace GroomiBackend.Controllers
                 if (string.IsNullOrEmpty(userId))
                     return new GeneralResponse(false, "User not authenticated.", HttpContext.Request.Path);
 
-                if (groomingQueue.CheckTimeOfAppointment(updatedEntry.AppointmentTime))
+                if (groomingQueue.CheckTimeOfAppointment(updatedEntry.AppointmentTime, id))
                 {
                     return new GeneralResponse(false, "Appointment has to be in half hour space between each other", HttpContext.Request.Path);
                 }

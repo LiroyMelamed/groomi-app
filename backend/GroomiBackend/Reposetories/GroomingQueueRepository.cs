@@ -52,13 +52,18 @@ namespace GroomiBackend.Repositories
                 .ToList();
         }
 
-        public bool CheckTimeOfAppointment(DateTime time)
+        public bool CheckTimeOfAppointment(DateTime time, int? excludeAppointmentId = null)
         {
             DateTime minTime = time.AddMinutes(-29);
             DateTime maxTime = time.AddMinutes(29);
 
-            return GetTable().Any(x => x.AppointmentTime >= minTime && x.AppointmentTime <= maxTime);
+            return GetTable().Any(x =>
+                x.AppointmentTime >= minTime &&
+                x.AppointmentTime <= maxTime &&
+                (excludeAppointmentId == null || x.Id != excludeAppointmentId)
+            );
         }
+
 
         public bool CheckTimeOfAppointmentIsInThePast(DateTime time)
         {
